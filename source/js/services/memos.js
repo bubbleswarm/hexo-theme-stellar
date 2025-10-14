@@ -61,14 +61,15 @@ utils.jq(() => {
                   .finally(() => delete memos.requests[creatorId]);
             }
             await memos.requests[creatorId];
-            user = memos.users.find(user => user.id === parseInt(creatorId));
+            //user = memos.users.find(user => user.id === parseInt(creatorId));
+            user = memos.users[0];
           }
-          const name = user ? user.nickname || user.username : 'memos';
+          const name = user ? user.displayName || user.username : 'memos';
           const avatarUrl = user?.avatarUrl ? `${memos.site}${user.avatarUrl}` : default_avatar || '';
           return `<div class="user-info">${avatarUrl ? `<img src="${avatarUrl}">` : ''}<span>${name}</span></div>`;
         },
         buildDate: item => new Date(item.createTime),
-        buildImages: (item) => (item.resources || []).filter(res => res.type?.includes('image/')).map(res =>
+        buildImages: (item) => (item.attachments || []).filter(res => res.type?.includes('image/')).map(res =>
             `<p><img src="${res.externalLink || `https://${host}/o/r/${res.id}`}"></p>`
         )
       },
